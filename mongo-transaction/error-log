@@ -1,0 +1,29 @@
+rstest:PRIMARY> db.accounts.find({})
+{ "_id" : ObjectId("5cb752de57e8791edf030e9d"), "name" : "James", "balance" : 3000, "__v" : 0 }
+{ "_id" : ObjectId("5cb752de57e8791edf030e9e"), "name" : "Wade", "balance" : 0, "__v" : 0 }
+rstest:PRIMARY> db.accounts.update({"name":"Wade"}, { $inc:{'balance':10}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+rstest:PRIMARY> db.accounts.find({})
+{ "_id" : ObjectId("5cb752de57e8791edf030e9d"), "name" : "James", "balance" : 3000, "__v" : 0 }
+{ "_id" : ObjectId("5cb752de57e8791edf030e9e"), "name" : "Wade", "balance" : 10, "__v" : 0 }
+rstest:PRIMARY> db.accounts.find({})
+{ "_id" : ObjectId("5cb752de57e8791edf030e9d"), "name" : "James", "balance" : 3000, "__v" : 0 }
+{ "_id" : ObjectId("5cb752de57e8791edf030e9e"), "name" : "Wade", "balance" : 10, "__v" : 0 }
+
+/usr/local/bin/node --inspect-brk=8838 transaction.js
+Debugger listening on ws://127.0.0.1:8838/331a4f49-df7b-42dd-872e-ae2f30fee089
+Debugger attached.
+(node:7903) DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.
+(node:7903) DeprecationWarning: collection.remove is deprecated. Use deleteOne, deleteMany, or bulkWrite instead.
+(node:7903) DeprecationWarning: collection.findAndModify is deprecated. Use findOneAndUpdate, findOneAndReplace or findOneAndDelete instead.
+null: Object {_id: ObjectID, name: "James", balance: 2900, __v: 0}
+null: MongoError: WriteConflict
+MongoError: Attempted illegal state transition from [TRANSACTION_ABORTED] to [TRANSACTION_ABORTED]
+    at Transaction.transition (/Users/dengwei/projects/github/no7dw/js/node_modules/_mongodb-core@3.2.2@mongodb-core/lib/transactions.js:147:11)
+    at commandHandler (/Users/dengwei/projects/github/no7dw/js/node_modules/_mongodb-core@3.2.2@mongodb-core/lib/sessions.js:465:27)
+    at session.topology.command (/Users/dengwei/projects/github/no7dw/js/node_modules/_mongodb-core@3.2.2@mongodb-core/lib/sessions.js:502:5)
+    at cb (/Users/dengwei/projects/github/no7dw/js/node_modules/_mongodb-core@3.2.2@mongodb-core/lib/topologies/replset.js:1318:14)
+    at commandResponseHandler (/Users/dengwei/projects/github/no7dw/js/node_modules/_mongodb-core@3.2.2@mongodb-core/lib/wireprotocol/command.js:89:25)
+    at /Users/dengwei/projects/github/no7dw/js/node_modules/_mongodb-core@3.2.2@mongodb-core/lib/connection/pool.js:397:18
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
