@@ -13,6 +13,8 @@ async function afterWork() {
     await Acc.remove({ 'name': 'James' })
     await Acc.remove({ 'name': 'Wade' })
 }
+const sleep = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
+
 async function transferTest(transfer) {
     let session = await Acc.startSession()
     session.startTransaction()
@@ -24,6 +26,7 @@ async function transferTest(transfer) {
             $inc: { 'balance': -transfer }
         }, opts)
         console.log(a.toObject());
+        await sleep(8000)
         let b = await Acc.findOneAndUpdate({
             'name': 'Wade',
         }, {
