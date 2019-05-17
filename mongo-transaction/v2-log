@@ -1,0 +1,21 @@
+{ _id: 5cde8b119ce5786b9d83cb41,
+  name: 'James',
+  balance: 2900,
+  love: 'Kelvin',
+  __v: 0 }
+{ _id: 5cde8b119ce5786b9d83cb41,
+  name: 'James',
+  balance: 2800,
+  love: 'Kelvin',
+  __v: 0 }
+{ _id: 5cde8b119ce5786b9d83cb41,
+  name: 'James',
+  balance: 2700,
+  love: 'Wade',
+  __v: 0 }
+sleep 3 secs
+{ _id: 5cde8b119ce5786b9d83cb42,
+  name: 'Wade',
+  balance: 100,
+  love: 'James',
+  __v: 0 }
