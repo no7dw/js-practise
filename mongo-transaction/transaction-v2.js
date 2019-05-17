@@ -1,17 +1,18 @@
 const mongoose = require('mongoose')
 const mongoUri = 'mongodb://localhost:27017,localhost:37017,localhost:47017/test'
-const client = mongoose.createConnection(mongoUri, { replicaSet: 'rstest1' })
+const client = mongoose.createConnection(mongoUri, { replicaSet: 'rstest1', useNewUrlParser: true })
 let Acc = client.model('Account', new mongoose.Schema({
     name: String,
-    balance: Number
+    balance: Number,
+    love: String
 }))
 async function initTest() {
-    await Acc.create({ 'name': 'James', 'balance': 3000 })
-    await Acc.create({ 'name': 'Wade', 'balance': 0 })
+    await Acc.create({ 'name': 'James', 'balance': 3000, 'love': 'Kelvin' })
+    await Acc.create({ 'name': 'Wade', 'balance': 0, 'love': 'James' })
 }
 async function afterWork() {
-    await Acc.remove({ 'name': 'James' })
-    await Acc.remove({ 'name': 'Wade' })
+    await Acc.deleteOne({ 'name': 'James' })
+    await Acc.deleteOne({ 'name': 'Wade' })
 }
 const sleep = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
 
@@ -26,7 +27,21 @@ async function transferTest(transfer) {
             $inc: { 'balance': -transfer }
         }, opts)
         console.log(a.toObject());
-        await sleep(8000)
+        let c = await Acc.findOneAndUpdate({
+            'name': 'James'
+        }, {
+            $inc: { 'balance': -transfer }
+        }, opts)
+        console.log(c.toObject());
+        let d = await Acc.findOneAndUpdate({
+            'name': 'James'
+        }, {
+            $set: { 'love': 'Wade' },
+            $inc: { 'balance': -transfer }
+        }, opts)
+        console.log(d.toObject());
+        console.log('sleep 3 secs')
+        await sleep(3000)
         let b = await Acc.findOneAndUpdate({
             'name': 'Wade',
         }, {
@@ -46,7 +61,7 @@ async function test() {
     await afterWork()
     await initTest()
     await transferTest(100)
-        // await afterWork()
     process.exit()
+        // await afterWork()
 }
 test()
